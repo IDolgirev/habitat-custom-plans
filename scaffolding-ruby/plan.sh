@@ -1,7 +1,7 @@
 pkg_name=scaffolding-ruby
-pkg_origin=core
+pkg_origin=idolgirev
 pkg_version="0.8.7"
-pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
+pkg_maintainer="Ilya Dolgirev <ilya.dolgirev@gmail.com>"
 pkg_license=('Apache-2.0')
 pkg_description="Habitat Plan Scaffolding for Ruby Applications"
 pkg_upstream_url="https://github.com/habitat-sh/core-plans/tree/master/scaffolding-ruby"
