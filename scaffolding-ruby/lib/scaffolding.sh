@@ -646,7 +646,7 @@ _add_busybox() {
 _detect_execjs() {
   if _has_gem execjs; then
     build_line "Detected 'execjs' gem in Gemfile.lock, adding node packages"
-    pkg_deps=(core/node ${pkg_deps[@]})
+    pkg_deps=(idolgirev/node ${pkg_deps[@]})
     debug "Updating pkg_deps=(${pkg_deps[*]}) from Scaffolding detection"
   fi
 }
@@ -810,7 +810,7 @@ _detect_sqlite3() {
 _detect_webpacker() {
   if _has_gem webpacker; then
     build_line "Detected 'webpacker' gem in Gemfile.lock, adding yarn packages"
-    pkg_deps=(core/yarn ${pkg_deps[@]})
+    pkg_deps=(idolgirev/yarn ${pkg_deps[@]})
     debug "Updating pkg_deps=(${pkg_deps[*]}) from Scaffolding detection"
   fi
 }
