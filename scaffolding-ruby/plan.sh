@@ -1,6 +1,6 @@
 pkg_name=scaffolding-ruby
 pkg_origin=idolgirev
-pkg_version="0.8.7"
+pkg_version="0.8.8"
 pkg_maintainer="Ilya Dolgirev <ilya.dolgirev@gmail.com>"
 pkg_license=('Apache-2.0')
 pkg_description="Habitat Plan Scaffolding for Ruby Applications"
