@@ -72,7 +72,7 @@ do_default_build() {
 
 do_default_install() {
   scaffolding_install_app
-  yarn install --module-folder $scaffolding_app_prefix/node_modules
+  yarn install --module-folder $scaffolding_app_prefix
   scaffolding_install_gems
   scaffolding_generate_binstubs
   scaffolding_vendor_bundler
