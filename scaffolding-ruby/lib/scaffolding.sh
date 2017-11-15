@@ -388,7 +388,7 @@ scaffolding_run_assets_precompile() {
   # TODO fin: early exit if existing assets are found, meaning they've been
   # committed or at least not ignored.
   if _has_gem webpacker; then
-    $scaffolding_app_prefix/binstubs/bundle exec yarn install --modules-folder $scaffolding_app_prefix/node_modules
+    $scaffolding_app_prefix/binstubs/yarn install --modules-folder $scaffolding_app_prefix/node_modules
   fi
 
   if _has_gem rake && _has_rakefile; then
