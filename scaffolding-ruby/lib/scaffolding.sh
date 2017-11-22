@@ -391,6 +391,7 @@ scaffolding_run_assets_precompile() {
   if _has_gem webpacker; then
     pushd "$scaffolding_app_prefix" > /dev/null
     yarn install
+    attach
 
     if _has_gem rake && _has_rakefile; then
       # pushd "$scaffolding_app_prefix" > /dev/null
