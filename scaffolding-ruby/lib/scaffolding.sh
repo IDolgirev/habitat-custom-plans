@@ -394,12 +394,15 @@ scaffolding_install_yarn_packages() {
 		local shebang bin_path
 		# shebang="#!$(pkg_path_for "$_node_pkg")/bin/node"
 		shebang="#!$(pkg_path_for node)/bin/node"
-		bin_path="$CACHE_PATH/node_modules/.bin"
+		bin_path="$scaffolding_app_prefix/node_modules/.bin"
 
 		build_line "Fixing Node shebang for node_module bins"
 		if [[ -d "$bin_path" ]]; then
 			find "$bin_path" -type f -o -type l | while read -r bin; do
-				sed -e "s|^#!.\{0,\}\$|${shebang}|" -i "$(readlink -f "$bin")"
+				# sed -e "s|^#!.\{0,\}\$|${shebang}|" -i "$(readlink -f "$bin")"
+        if grep -q '^#!/usr/bin/env /.*/bin/node$' "$bin"; then
+          sed -e "s|^#!/usr/bin/env /.\{0,\}/bin/node\$|${shebang}|" -i "$bin"
+        fi
 			done
 		fi
 
