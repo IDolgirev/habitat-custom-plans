@@ -72,12 +72,12 @@ do_default_build() {
 
 do_default_install() {
   scaffolding_install_app
-  # yarn install --module-folder $scaffolding_app_prefix
   scaffolding_install_gems
   scaffolding_generate_binstubs
   scaffolding_vendor_bundler
   scaffolding_install_libexec
   scaffolding_fix_binstub_shebangs
+  scaffolding_install_yarn_packages
   scaffolding_run_assets_precompile
   scaffolding_create_dir_symlinks
   scaffolding_create_files_symlinks
@@ -385,37 +385,60 @@ scaffolding_fix_binstub_shebangs() {
   done
 }
 
-scaffolding_run_assets_precompile() {
-  # TODO fin: early exit if existing assets are found, meaning they've been
-  # committed or at least not ignored.
+scaffolding_install_yarn_packages() {
   if _has_gem webpacker; then
     pushd "$scaffolding_app_prefix" > /dev/null
+		build_line "Installing Node packages"
     yarn install
-    fix_interpreter "node_modules/.bin/*" core/coreutils bin/env
-    attach
 
-    if _has_gem rake && _has_rakefile; then
-      # pushd "$scaffolding_app_prefix" > /dev/null
-      if _rake -P --trace | grep -q '^rake assets:precompile$'; then
-        build_line "Detected and running Rake 'assets:precompile'"
-        export DATABASE_URL=${DATABASE_URL:-"postgresql://nobody@nowhere/fake_db_to_appease_rails_env"}
-        _rake assets:precompile
-      fi
-      # popd > /dev/null
-    fi
+		local shebang bin_path
+		# shebang="#!$(pkg_path_for "$_node_pkg")/bin/node"
+		shebang="#!$(pkg_path_for node)/bin/node"
+		bin_path="$CACHE_PATH/node_modules/.bin"
+
+		build_line "Fixing Node shebang for node_module bins"
+		if [[ -d "$bin_path" ]]; then
+			find "$bin_path" -type f -o -type l | while read -r bin; do
+				sed -e "s|^#!.\{0,\}\$|${shebang}|" -i "$(readlink -f "$bin")"
+			done
+		fi
 
     popd > /dev/null
   fi
+}
 
-  # if _has_gem rake && _has_rakefile; then
+scaffolding_run_assets_precompile() {
+  # TODO fin: early exit if existing assets are found, meaning they've been
+  # committed or at least not ignored.
+
+  # if _has_gem webpacker; then
   #   pushd "$scaffolding_app_prefix" > /dev/null
-  #   if _rake -P --trace | grep -q '^rake assets:precompile$'; then
-  #     build_line "Detected and running Rake 'assets:precompile'"
-  #     export DATABASE_URL=${DATABASE_URL:-"postgresql://nobody@nowhere/fake_db_to_appease_rails_env"}
-  #     _rake assets:precompile
+  #   yarn install
+  #   fix_interpreter "node_modules/.bin/*" core/coreutils bin/env
+  #   attach
+
+  #   if _has_gem rake && _has_rakefile; then
+  #     # pushd "$scaffolding_app_prefix" > /dev/null
+  #     if _rake -P --trace | grep -q '^rake assets:precompile$'; then
+  #       build_line "Detected and running Rake 'assets:precompile'"
+  #       export DATABASE_URL=${DATABASE_URL:-"postgresql://nobody@nowhere/fake_db_to_appease_rails_env"}
+  #       _rake assets:precompile
+  #     fi
+  #     # popd > /dev/null
   #   fi
+
   #   popd > /dev/null
   # fi
+
+  if _has_gem rake && _has_rakefile; then
+    pushd "$scaffolding_app_prefix" > /dev/null
+    if _rake -P --trace | grep -q '^rake assets:precompile$'; then
+      build_line "Detected and running Rake 'assets:precompile'"
+      export DATABASE_URL=${DATABASE_URL:-"postgresql://nobody@nowhere/fake_db_to_appease_rails_env"}
+      _rake assets:precompile
+    fi
+    popd > /dev/null
+  fi
 }
 
 scaffolding_create_dir_symlinks() {
