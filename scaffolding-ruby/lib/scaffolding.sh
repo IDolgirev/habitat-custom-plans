@@ -392,7 +392,6 @@ scaffolding_install_yarn_packages() {
     yarn install
 
 		local shebang bin_path
-		# shebang="#!$(pkg_path_for "$_node_pkg")/bin/node"
 		shebang="#!$(pkg_path_for node)/bin/node"
 		bin_path="$scaffolding_app_prefix/node_modules/.bin"
 
@@ -400,8 +399,10 @@ scaffolding_install_yarn_packages() {
 		if [[ -d "$bin_path" ]]; then
 			find "$bin_path" -type f -o -type l | while read -r bin; do
 				# sed -e "s|^#!.\{0,\}\$|${shebang}|" -i "$(readlink -f "$bin")"
-        if grep -q '^#!/usr/bin/env /.*/bin/node$' "$bin"; then
-          sed -e "s|^#!/usr/bin/env /.\{0,\}/bin/node\$|${shebang}|" -i "$bin"
+        # if grep -q '^#!/usr/bin/env /.*/bin/node$' "$bin"; then
+        if grep -q '^#!/usr/bin/env node$' "$bin"; then
+          # sed -e "s|^#!/usr/bin/env /.\{0,\}/bin/node\$|${shebang}|" -i "$bin"
+          sed 's|^#!/usr/bin/env node|'"$shebang"'|' -i "$bin"
         fi
 			done
 		fi
