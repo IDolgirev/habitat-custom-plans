@@ -5,7 +5,7 @@ pkg_maintainer="Ilya Dolgirev <ilya.dolgirev@gmail.com>"
 pkg_license=('Apache-2.0')
 pkg_description="Habitat Plan Scaffolding for Ruby Applications"
 pkg_upstream_url="https://github.com/habitat-sh/core-plans/tree/master/scaffolding-ruby"
-pkg_deps=(core/coreutils idolgirev/bundler core/ruby core/tar core/busybox-static core/rq core/gcc core/make core/pkg-config)
+pkg_deps=(idolgirev/bundler core/ruby core/tar core/busybox-static core/rq core/gcc core/make core/pkg-config)
 pkg_build_deps=(core/coreutils core/sed)
 pkg_bin_dirs=(bin)
 
