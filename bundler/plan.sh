@@ -21,6 +21,11 @@ do_build() {
 }
 
 do_install() {
+  # To avoid known bug when Vendored Bundler causes LoadError when running `bundle exec`
+  # https://github.com/rubygems/rubygems/issues/2055
+  build_line "Updating RubyGems"
+  gem update --system
+
   build_line "Installing from RubyGems"
   gem install "$pkg_name" -v "$pkg_version" --no-ri --no-rdoc
   # Note: We are not cleaning the gem cache as this artifact
